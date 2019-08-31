@@ -1,338 +1,117 @@
-# cool-spring-stuff-employee-mgmtsys
-Employee Management System
+# Employee Management System
 
-
-# cool-spring-stuff-employee-mgmt-system
-Employee Management System
 
 
 # Technologies Used
 
-a) Spring Boot
-b) Maven
-c) Java 8
-d) Apache Tomcat
-e) MySQL
+1. Spring Boot
+2. Maven
+3. Java 8
+4. Apache Tomcat
+5. MySQL
 
 
 
 # Steps I followed
 
-
-# 2. Create a maven webapp project and 
-# add in the following dependencies in pom.xml 
-# to convert the project to spring boot
-
-  <parent>
-	<groupId>org.springframework.boot</groupId>
-	<artifactId>spring-boot-starter-parent</artifactId>
-	<version>2.1.6.RELEASE</version>
-  </parent>
-
-  <dependencies>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>3.8.1</version>
-      <scope>test</scope>
-    </dependency>
-    
-	<dependency>
-	    <groupId>org.springframework.boot</groupId>
-	    <artifactId>spring-boot-starter-data-jpa</artifactId>
-	</dependency>
+	-------------------------------------------------------------------------------------------------------------
 	
-	<dependency>
-	    <groupId>org.springframework.boot</groupId>
-	    <artifactId>spring-boot-starter-web</artifactId>
-	</dependency>
+	# PHASE ONE #(Create a CRUD Application)
 	
-	<dependency>
-	    <groupId>org.apache.tomcat.embed</groupId>
-	    <artifactId>tomcat-embed-jasper</artifactId>
-	    <scope>provided</scope>
-	</dependency>
-	
-	<dependency>
-	    <groupId>org.springframework.boot</groupId>
-	    <artifactId>spring-boot-devtools</artifactId>
-	    <scope>runtime</scope>
-	</dependency>
-	
-	<dependency>
-	    <groupId>org.springframework.boot</groupId>
-	    <artifactId>spring-boot-starter-test</artifactId>
-	    <scope>test</scope>
-	</dependency>
-	
-	<dependency>
-	    <groupId>javax.servlet</groupId>
-	    <artifactId>jstl</artifactId>
-	</dependency>
-	
-	<dependency>
-	    <groupId>mysql</groupId>
-	    <artifactId>mysql-connector-java</artifactId>
-	    <scope>runtime</scope>
-	</dependency>
-	
-	<dependency>
-	    <groupId>org.hibernate.validator</groupId>
-	    <artifactId>hibernate-validator</artifactId>
-	</dependency>
-  </dependencies>
-
-# 3. Model
-package cool_stuff.sursa.employeemgmt_system.model;
-
-import java.util.Date;
-
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
-@Entity
-@Table(name = "Employee")
-@EntityListeners(AuditingEntityListener.class)
-public class Employee {
-
-	public Employee() {
-		// TODO Auto-generated constructor stub
-	}
-	
-	public static final long serialVersionUID = 1L;
-
-	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	private int id;
-	
-	@Size(min=3, max=30)
-	private String firstName;
-	
-	@Size(min=3, max=30)
-	private String lastName;
-	
-	@NotBlank
-	private String email;
-	
-	@NotBlank
-	private String country;
-	
-	@NotEmpty
-	private String sex;
-	
-	@Temporal(TemporalType.TIMESTAMP)
-	@LastModifiedDate
-	private Date createdAt;
-	
-	@NotEmpty
-	private String section;
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public String getFirstName() {
-		return firstName;
-	}
-
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getCountry() {
-		return country;
-	}
-
-	public void setCountry(String country) {
-		this.country = country;
-	}
-
-	public String getSex() {
-		return sex;
-	}
-
-	public void setSex(String sex) {
-		this.sex = sex;
-	}
-
-	public Date getCreatedAt() {
-		return createdAt;
-	}
-
-	public void setCreatedAt(Date createdAt) {
-		this.createdAt = createdAt;
-	}
-
-	public String getSection() {
-		return section;
-	}
-
-	public void setSection(String section) {
-		this.section = section;
-	}
-	
-}
-
-
-# 4. Controller
-
-package cool_stuff.sursa.employeemgmt_system.controller;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.validation.Valid;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import cool_stuff.sursa.employeemgmt_system.dao.EmployeeDAO;
-import cool_stuff.sursa.employeemgmt_system.model.Employee;
-
-@Controller
-public class EmployeeController {
-	
-	@Autowired
-	private EmployeeDAO empDao;
-	
-	@RequestMapping(value="/create", method=RequestMethod.GET)
-	public String createEmployee(ModelMap model) {
-		Employee employee = new Employee();
-		model.addAttribute("employee", employee);
-		return "create";
-	}
-	
-	@RequestMapping(value="/save", method=RequestMethod.POST)
-	public String saveEmployee(@Valid Employee employee, BindingResult result, ModelMap model, RedirectAttributes redirectAttributes) {
-		if(result.hasErrors()) {
-			return "create";
-		}
-		empDao.save(employee);
-		return "redirect:/view/employees";
-	}
-	
-	@RequestMapping(value="/view/employees")
-	public ModelAndView getAll() {
-		List<Employee> empList = empDao.findAll();
-		return new ModelAndView("viewemployees", "list", empList);
-	}
-
-	@RequestMapping(value="/edit/employee/{id}")
-	public String edit(@PathVariable int id, ModelMap model) {
-		Employee employee = empDao.findById(id);
-		model.addAttribute("employee", employee);
-		return "editemployee";
-	}
-	
-	@RequestMapping(value="/update/employee", method=RequestMethod.POST)
-	public ModelAndView updateemployee(@ModelAttribute("employee") Employee emp) {
-		Employee employee = empDao.findById(emp.getId());
-		employee.setFirstName(emp.getFirstName());
-		employee.setLastName(emp.getLastName());
-		employee.setCountry(emp.getCountry());
-		employee.setEmail(emp.getEmail());
-		employee.setSection(emp.getSection());
-		employee.setSex(emp.getSex());
+		1. Create a maven webapp project and add in the required dependencies in pom.xml to convert the project to spring boot
 		
-		empDao.save(employee);
-		return new ModelAndView("redirect:/view/employees");
-	}
+		2. Create a model to connect it to the database using hibernate later on.
+		
+		3. Create a Employee Repository where you define a interface that implements JpaRepository.
+		
+		4. Create a DAO to handle the methods of the Employee repository.
+		
+		5. Create a Controller to handle the model and views.
+		
+		6. Then, create your main application where your main method will be executed.
+		
+	-------------------------------------------------------------------------------------------------------------
 	
-	@RequestMapping(value="/delete/employee/{id}", method=RequestMethod.GET)
-	public ModelAndView delete(@PathVariable int id) {
-		Employee emp = empDao.findById(id);
-		empDao.delete(emp);
-		return new ModelAndView("redirect:/view/employees");
-	}
-	
-	
-	@ModelAttribute("sections")
-	public List<String> intializeSections(){
-		List<String> sections = new ArrayList<String>();
-		sections.add("Graduate");
-		sections.add("Post Graduate");
-		sections.add("Reasearch");
-		return sections;
-	}
-	
-	@ModelAttribute("countries")
-	public List<String> initializeCountries() {
-		List<String> countries = new ArrayList<String>();
-		countries.add("Nepal");
-		countries.add("Japan");
-		countries.add("Korea");
-		countries.add("USA");
-		countries.add("Australia");
-		countries.add("Italy");
-		countries.add("Other");
-		return countries;
-	}
-	
-	
-}
- 
-# 5. Repository
-package cool_stuff.sursa.employeemgmt_system.repository;
+	# PHASE TWO #(Logic of Spring Security)
+		
+		1. Build the code of Model classes inside the model package.
+			- User Class
+			- Role Class
+			#Note: 
+				a. Entity is a lightweight persistence object which represents a table in a relational database. 
+				b. Each entity instance corresponds a row in that table.
+			
+		2. Build the code of JPA Repository inside the repository package.
+			- Create an interface as UserRepository 
+			- The repo extends JpaRepository<User, Long>
+			- Create an interface as RoleRepository and extend it to <Role, Long>
+			#Note:
+				a. JPA (Java Persistence API) is a java specification for accessing, persisting, and managing 
+				   data between Java objects/classes and a relational database.
+				b. JPA was defined as a part of the EJB 3.0 specificatin as a replacement for the EJB 2 CMP 
+				   Entity Beans Specification.
+				c. JPA is now considered as the standard industry approach for Object to Relational Mapping (ORM)
+				   in the Java industry.
+		
+		3. Build the code of service classes inside DAO package.
+			- Create a class as UserDetailsServiceImpl where you tackle with the user roles and authorities
+			- Create an interface as UserService which has the signatures : 
+				~ void save(User user)
+				~ User findByUsername(String username)
+			- Create a class as UserServiceImpl that implements UserService
+			- Create an interface as SecurityService
+				~ void autoLogin(String username, String password )
+			- Create an implementation for the SecurityService as SecurityServiceImpl
+			
+			#Note: 
+				a. UserDetailsService is used in order to lookup the username, password and GrantedAuthorities
+				   for any given user.
+				b. The in terface provides only one method for implementing class to implement.
+				c. UserDetails loadUserByUsername(String username) throws UsernameNotFoundException.
+				d. The four annotaions (component, service, repository and controller) make the class as a spring 
+				   bean to the IOC container. @Service on service classes(implementations) represents the service class a bean to 
+				   the IOC container.
+				e. @Autowired can be used directly on properties, thus eliminating the need of getters and setters.
+				f. @Transactional provides a way for Springboot to inject behaviors before, after, or around method 
+				   calls to an object being proxied.
+				   Transactional Management is just one example of the behaviors that can be hooked in. Security checks
+				   are another.
+				   And you can provide your own, too, for things like logging.
+				   So, when you annotate the method with this @, Springboot dynamically creates a proxy that implements 
+				   the same interfacee(s) as the class you're annotating.
+				   And when the client makes calls into your object, the calls are intercepted and the behaviors injected
+				   via the proxy mechanism.
+				   By the way, transactions in EJB work in a similar fashion.   
+						
+    -------------------------------------------------------------------------------------------------------------
+		
+	# PHASE THREE #(Controller layer)
+		
+		1. Inside ~src/main/resources, create a file named 'validation.properties' and place some conditions.
+		   - For eg: NotEmpty=This field is required.
+						
+		2. Build the code of UserValidator in a new package named as 'validator' for instance.
+		   - Define all the required validation rules. 
+					
+		3. Inside ~src/main/resources, create a file named 'validation.properties' and place some conditions.
+		   - For eg: NotEmpty=This field is required.
+						
+		4. Build the code of registration and login in the controller layer.
+					
+		5. Create a class named as WebSecurityConfig inside your main package. (where your main class is also present)
+		   - Use annotations : @Configuration @EnableWebSecurity
+		   - Define methods
+			
+   -------------------------------------------------------------------------------------------------------------
+		
+   # PHASE FOUR #(Manage Views)
+   
+   1. I specifically used jstl, spring form and jsp
+   
+   	    <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+		<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+		<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+		<%@ page isELIgnored="false"%>
 
-import org.springframework.data.jpa.repository.JpaRepository;
-
-import cool_stuff.sursa.employeemgmt_system.model.Employee;
-
-public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
-
-}
-
-# 6. Main Application
-package cool_stuff.sursa.employeemgmt_system;
-
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
-
-@SpringBootApplication
-@EnableJpaAuditing
-public class EmployeeApplication {
-	public static void main(String[] args) {
-		SpringApplication.run(EmployeeApplication.class, args);
-	}
-}
-
+		
+			

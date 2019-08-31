@@ -1,19 +1,22 @@
-<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>    
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>  
+
+<c:set var="contextPath" value="${pageContext.request.contextPath}"/>
+
+
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<link href="/css/bootstrap.css" rel="stylesheet">
-<link href="/css/custom.css" rel="stylesheet">
-<link href="/css/main.css" rel="stylesheet">
+<link href="${contextPath}/css/bootstrap.css" rel="stylesheet">
+<link href="${contextPath}/css/main.css" rel="stylesheet">
 </head>
 <body>
 	<h1 align="center">Employees List</h1>
 	<table id="t02">
 		<tr>
-			<th><a href="/create">Add New employee</a></th>
+			<th><a href="${contextPath}/create">Add New employee</a></th>
 
-			<th><a href="/delete/employee">Delete employees</a></th>
+			<th><a href="#">..................</a></th>
 		</tr>
 	</table>
 	<table>
@@ -37,7 +40,7 @@
 			</tr>
 
 			<c:forEach var="employee" items="${list}">
-				<tr>
+				<tr style="padding-left : 15px;">
 					<td>${employee.id}</td>
 					<td>${employee.firstName}</td>
 					<td>${employee.lastName}</td>
@@ -48,8 +51,8 @@
 					<td>${employee.country}</td>
 
 
-					<td><a href="/edit/employee/${employee.id}">Edit</a></td>
-					<td><a href="/delete/employee/${employee.id}">Delete</a></td>
+					<td><a href="${contextPath}/edit/employee/${employee.id}">Edit</a></td>
+					<td><a href="${contextPath}/delete/employee/${employee.id}">Delete</a></td>
 				</tr>
 			</c:forEach>
 
@@ -59,5 +62,20 @@
 
 
 	</form:form>
+	<div class="container">
+
+		<c:if test="${pageContext.request.userPrincipal.name != null}">
+			<form id="logoutForm" method="POST" action="${contextPath}/logout">
+				<input type="hidden" name="${_csrf.parameterName}"
+					value="${_csrf.token}" />
+			</form>
+
+			<h2>
+				${contextPath} *Welcome ${pageContext.request.userPrincipal.name} |
+				<a onclick="document.forms['logoutForm'].submit()"><button>Logout</button></a>
+			</h2>
+
+		</c:if>
+	</div>
 </body>
 </html>

@@ -1,16 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+    pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ page isELIgnored="false"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<c:set var="contextPath" value="${pageContext.request.contextPath}"/>
+<%@ page isELIgnored="false" %>
 
 <html>
 
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<link href="/css/bootstrap.css" rel="stylesheet">
-<link href="/css/custom.css" rel="stylesheet">
-<link href="/css/main.css" rel="stylesheet">
+<link href="${contextPath}/css/bootstrap.css" rel="stylesheet">
+<link href="${contextPath}/css/common.css" rel="stylesheet">
 </head>
 
 <body>
@@ -19,7 +19,7 @@
 
 		<h1>Edit employee Details</h1>
 
-		<form:form method="POST" modelAttribute="employee" class="form-horizontal" action="/update/employee">
+		<form:form method="POST" modelAttribute="employee" class="form-horizontal" action="${contextPath}/update/employee">
 
 			<div class="row">
 				<div class="form-group col-md-12">
