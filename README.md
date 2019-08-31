@@ -104,14 +104,67 @@
 			
    -------------------------------------------------------------------------------------------------------------
 		
-   # PHASE FOUR #(Manage Views)
+    # PHASE FOUR #(Manage Views)
    
-   1. I specifically used jstl, spring form and jsp
+      1. I specifically used jstl, spring form and jsp
    
-   	    <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
-		<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-		<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-		<%@ page isELIgnored="false"%>
+   	    <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+   	    
+		<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+		
+	    <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
+		<c:set var="contextPath" value="${pageContext.request.contextPath}"/>
+
+	 2. See this code inside WebSecurityConfig.
+	 
+	    @Configuration
+		@EnableWebSecurity
+		public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+			
+			
+			@Autowired
+			private UserDetailsService udService;
+			
+			@Bean
+			public AuthenticationManager authenticationManagerBean() throws Exception {
+			    return super.authenticationManagerBean();
+			}
+			
+			@Override
+			public void configure(WebSecurity web) throws Exception {
+			    web
+			    	.ignoring()
+			    		.antMatchers("/javax.faces.resource/**");
+			}
+			
+			@Bean
+			public BCryptPasswordEncoder lockPassword() {
+				return new BCryptPasswordEncoder();
+			}
+			
+			@Override
+			protected void configure(HttpSecurity http) throws Exception {
+				http
+						.authorizeRequests()
+							.antMatchers("/css/**", "/js/**", "/registration").permitAll()
+							.anyRequest().authenticated()
+							.and()
+						.formLogin()
+							.loginPage("/login")
+							.permitAll()
+							.and()
+						.logout()
+							.permitAll();
+			}
+			
+			@Autowired
+			public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+				auth.userDetailsService(udService).passwordEncoder(lockPassword());
+			} 
+	 		
+   -------------------------------------------------------------------------------------------------------------
+		
+    # PHASE FIVE #(Give Roles to specific users)
 		
 			
