@@ -162,6 +162,8 @@
 			public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
 				auth.userDetailsService(udService).passwordEncoder(lockPassword());
 			} 
+			
+		3. Work around with bootstrap css and js
 	 		
    -------------------------------------------------------------------------------------------------------------
 		

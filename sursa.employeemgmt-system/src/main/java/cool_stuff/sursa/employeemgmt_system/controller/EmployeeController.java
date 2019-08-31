@@ -122,8 +122,8 @@ public class EmployeeController {
 	public List<String> intializeSections(){
 		List<String> sections = new ArrayList<String>();
 		sections.add("Graduate");
-		sections.add("Post Graduate");
-		sections.add("Reasearch");
+		sections.add("Post Grad");
+		sections.add("Research");
 		return sections;
 	}
 	
