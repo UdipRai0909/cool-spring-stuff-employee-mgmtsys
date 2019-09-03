@@ -33,6 +33,4 @@ public class EmployeeDAO {
 	public void delete(Employee emp) {
 		empRepo.delete(emp);
 	}
-	
-	
 }

@@ -58,8 +58,8 @@
 						
 						<button class="btn btn-lg btn-primary btn-block w-25 my-5 regsub form-group p-1 my-5" type="submit">Sign up</button>
 						
-						<h4 class="py-5 w-50 text-center">
-							<a href="${contextPath}/login">Already have an account? Login</a>
+						<h4 class="py-3 w-50 text-center">
+							<a href="${contextPath}/login">Have an account? Login</a>
 						</h4>
 					</form:form>
 				</div>
